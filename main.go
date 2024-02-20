@@ -16,6 +16,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/mylukin/EchoPilot-Template/config"
@@ -31,10 +32,16 @@ const APP_NAME = "EchoPilot"
 const APP_VERSION = "0.1.0"
 
 func init() {
+	// load .env
+	err := godotenv.Load()
+	if err != nil {
+		panic("Error loading .env file")
+	}
 	redisDb.Prefix(config.CachePrefix)
 }
 
 func main() {
+
 	e := echo.New()
 	// hidden Banner
 	e.HideBanner = true

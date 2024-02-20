@@ -1,3 +1,7 @@
+!.env.example
+
 .DS_Store
-/vendor
+.env
 app-bin
+
+/vendor
