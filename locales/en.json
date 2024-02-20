@@ -1,0 +1,7 @@
+{
+  "%s gen_bot_events [module] [outfile]": "%s gen_bot_events [module] [outfile]",
+  "Generate Bot Events": "Generate Bot Events",
+  "Hello, %s!": "Hello, %s!",
+  "[module] can't be empty.": "[module] can't be empty.",
+  "a tool for managing message translations.": "a tool for managing message translations."
+}
