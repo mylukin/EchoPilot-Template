@@ -63,7 +63,7 @@ func handleCLI() {
 	ei18n.SetLang(tag)
 
 	app := &cli.App{
-		Name:  `EchoPilot`,
+		Name:  `{APP_NAME}`,
 		Usage: ei18n.Sprintf("A new cli application"),
 		Action: func(c *cli.Context) error {
 			cli.ShowAppHelp(c)

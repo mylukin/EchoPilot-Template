@@ -1,7 +1,7 @@
 {
   "A new cli application": "A new cli application",
-  "EchoPilot test": "EchoPilot test",
   "Executing test command...": "Executing test command...",
   "Hello, %s!": "Hello, %s!",
-  "Start http server": "Start http server"
+  "Start http server": "Start http server",
+  "test": "test"
 }

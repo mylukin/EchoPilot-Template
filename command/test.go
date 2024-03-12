@@ -9,7 +9,7 @@ import (
 
 var Test = cli.Command{
 	Name:  "test",
-	Usage: ei18n.Sprintf("EchoPilot test"),
+	Usage: ei18n.Sprintf("test"),
 	Action: func(c *cli.Context) error {
 		return ExecuteTest()
 	},
