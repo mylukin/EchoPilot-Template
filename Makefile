@@ -1,4 +1,5 @@
 GOPATH=$(shell go env GOPATH)
+APP_NAME={APP_NAME}
 
 run: install-deps
 	@$(GOPATH)/bin/gin --appPort=80 --bin='app-bin' --immediate --buildArgs='-v -x -mod=vendor -buildvcs=false' run main.go  
@@ -30,5 +31,5 @@ build:
 	 chmod a+x ./app-bin
 
 install:
-	@go build -v -mod=vendor -buildvcs=false -o ./EchoPilot; \
-	 chmod a+x ./EchoPilot && mv ./EchoPilot $(GOPATH)/bin/
+	@go build -v -mod=vendor -buildvcs=false -o ./$(APP_NAME); \
+	 chmod a+x ./$(APP_NAME) && mv ./$(APP_NAME) $(GOPATH)/bin/

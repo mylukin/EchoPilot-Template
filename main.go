@@ -34,7 +34,7 @@ import (
 	_ "github.com/mylukin/EchoPilot-Template/catalog"
 )
 
-const APP_NAME = "EchoPilot"
+const APP_NAME = "{APP_NAME}"
 const APP_VERSION = "0.1.0"
 
 func init() {
