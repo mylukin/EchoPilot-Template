@@ -9,6 +9,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"log"
 	"net/http"
 	"net/http/httputil"
 	"os"
@@ -16,14 +17,19 @@ import (
 	"strings"
 	"time"
 
+	"github.com/Xuanwo/go-locale"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/mylukin/EchoPilot-Template/command"
 	"github.com/mylukin/EchoPilot-Template/config"
 	"github.com/mylukin/EchoPilot-Template/routers"
 	"github.com/mylukin/EchoPilot/helper"
 	eMiddleware "github.com/mylukin/EchoPilot/middleware"
+	"github.com/mylukin/EchoPilot/service/i18n"
 	redisDb "github.com/mylukin/EchoPilot/storage/redis"
+	ei18n "github.com/mylukin/easy-i18n/i18n"
+	"github.com/urfave/cli/v2"
 
 	_ "github.com/mylukin/EchoPilot-Template/catalog"
 )
@@ -41,7 +47,52 @@ func init() {
 }
 
 func main() {
+	if len(os.Args) > 1 && (os.Args[1] == "main.go" || os.Args[1] == "server") {
+		handleHttp()
+	} else {
+		handleCLI()
+	}
+}
 
+// CLI模式的处理逻辑
+func handleCLI() {
+	// Detect OS language
+	tag, _ := locale.Detect()
+
+	// Set Language
+	ei18n.SetLang(tag)
+
+	app := &cli.App{
+		Name:  `EchoPilot`,
+		Usage: ei18n.Sprintf("A new cli application"),
+		Action: func(c *cli.Context) error {
+			cli.ShowAppHelp(c)
+			return nil
+		},
+		Commands: []*cli.Command{
+			{
+				Name:    "server",
+				Aliases: []string{"s"},
+				Usage:   ei18n.Sprintf("Start http server"),
+				Action: func(c *cli.Context) error {
+					handleHttp()
+					return nil
+				},
+			},
+		},
+	}
+
+	// 注册命令
+	command.RegisterCommands(app)
+
+	err := app.Run(os.Args)
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+// HTTP请求的处理逻辑
+func handleHttp() {
 	e := echo.New()
 	// hidden Banner
 	e.HideBanner = true
@@ -92,7 +143,7 @@ func main() {
 
 	// mount routers
 	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, "Hello, World!")
+		return c.String(http.StatusOK, i18n.Sprintf(c, "Hello, World!"))
 	})
 
 	// mount api

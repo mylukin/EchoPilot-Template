@@ -1,7 +1,7 @@
 GOPATH=$(shell go env GOPATH)
 
 run: install-deps
-	@$(GOPATH)/bin/gin --appPort=80 --bin='app-bin' --immediate --buildArgs='-v -x -mod=vendor -buildvcs=false' run main.go 
+	@$(GOPATH)/bin/gin --appPort=80 --bin='app-bin' --immediate --buildArgs='-v -x -mod=vendor -buildvcs=false' run main.go  
 
 install-deps:
 	@ls $(GOPATH)/bin/gin > /dev/null 2>&1; if [ $$? -ne 0 ]; then \
@@ -28,3 +28,7 @@ generate: install-deps
 build:
 	@go build -v -mod=vendor -buildvcs=false -o ./app-bin; \
 	 chmod a+x ./app-bin
+
+install:
+	@go build -v -mod=vendor -buildvcs=false -o ./EchoPilot; \
+	 chmod a+x ./EchoPilot && mv ./EchoPilot $(GOPATH)/bin/
