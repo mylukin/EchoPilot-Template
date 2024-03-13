@@ -2,7 +2,7 @@ GOPATH=$(shell go env GOPATH)
 APP_NAME={APP_NAME}
 
 run: install-deps
-	@$(GOPATH)/bin/gin --appPort=80 --bin='app-bin' --immediate --buildArgs='-v -x -mod=vendor -buildvcs=false' run main.go  
+	@$(GOPATH)/bin/gin --port=3000 --bin='app-bin' --immediate --buildArgs='-v -x -mod=vendor -buildvcs=false' run main.go  
 
 install-deps:
 	@ls $(GOPATH)/bin/gin > /dev/null 2>&1; if [ $$? -ne 0 ]; then \
