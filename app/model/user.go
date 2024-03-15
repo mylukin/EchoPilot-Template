@@ -112,7 +112,7 @@ func (d *User) Delete(id primitive.ObjectID) error {
 func (d *User) GetList(page int, pageSize int) (int64, []*User, error) {
 	var total int64 = 0
 	var list []*User
-	if v, err := d.GetCollection().Where(bson.D{}).SetOpts(options.Find().SetSort(bson.D{{"_id", -1}})).Pagination(page, 2, &list); err != nil {
+	if v, err := d.GetCollection().Where(bson.D{}).SetOpts(options.Find().SetSort(bson.D{{"_id", -1}})).Pagination(page, pageSize, &list); err != nil {
 		return v, nil, err
 	}
 	return total, list, nil
