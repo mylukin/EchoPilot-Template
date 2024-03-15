@@ -12,11 +12,10 @@ import (
 
 // User
 type User struct {
-	BaseModel   `bson:",inline"`
-	MainAddress string `bson:"mainAddress" json:"mainAddress"`               // main address，根据助记词生成ETH地址
-	Timezone    string `bson:"timezone" json:"timezone"`                     // timezone
-	Status      string `bson:"status" json:"status"`                         // status, NORMAL=正常, BAN=屏蔽, DELETED=删除
-	Settings    bson.M `bson:"settings,omitempty" json:"settings,omitempty"` // settings
+	BaseModel `bson:",inline"`
+	Username  string `bson:"username" json:"username"` // username
+	Timezone  string `bson:"timezone" json:"timezone"` // timezone
+	Status    string `bson:"status" json:"status"`     // status, NORMAL=正常, BAN=屏蔽, DELETED=删除
 }
 
 func (d *User) CollectionName() string {
@@ -37,7 +36,7 @@ func init() {
 		bson.M{
 			"unique": true,
 			"keys": bson.D{
-				{"mainAddress", 1},
+				{"username", 1},
 			},
 		},
 	)
@@ -47,15 +46,15 @@ func init() {
 }
 
 // create user
-func (d *User) Create(mainAddress string, timezone string, status string) (*User, error) {
+func (d *User) Create(username string, timezone string) (*User, error) {
 	doc := &User{}
-	doc.MainAddress = mainAddress
+	doc.Username = username
 	doc.Timezone = timezone
-	doc.Status = status
 
 	if doc.Timezone == "" {
 		doc.Timezone = helper.Config("TZ")
 	}
+
 	if doc.Status == "" {
 		doc.Status = "NORMAL"
 	}
@@ -80,30 +79,15 @@ func (d *User) GetByID(id primitive.ObjectID) (*User, error) {
 	return doc, err
 }
 
-// get user by main address
-func (d *User) GetByMainAddress(mainAddress string) (*User, error) {
+// get user by username
+func (d *User) GetByUsername(username string) (*User, error) {
 	doc := &User{}
-	err := d.GetCollection().Where(bson.D{{"mainAddress", mainAddress}}).Find(doc)
+	err := d.GetCollection().Where(bson.D{{"username", username}}).Find(doc)
 	return doc, err
 }
 
-// check main address is available
-func (d *User) CheckMainAddressAvailable(mainAddress string) bool {
-	_, err := d.GetByMainAddress(mainAddress)
+// check username is available
+func (d *User) CheckUsernameAvailable(username string) bool {
+	_, err := d.GetByUsername(username)
 	return err == nil
-}
-
-// get user settings by id
-func (d *User) GetSettingsByID(id primitive.ObjectID) (bson.M, error) {
-	doc := &User{}
-	err := d.GetCollection().FindByID(id, doc)
-	return doc.Settings, err
-}
-
-// save user settings by id
-func (d *User) SaveSettingsByID(id primitive.ObjectID, settings bson.M) (*mongo.UpdateResult, error) {
-	return d.GetCollection().Where(bson.D{{"_id", id}}).UpdateOne(bson.M{"$set": bson.M{
-		"settings":  settings,
-		"updatedAt": time.Now(),
-	}})
 }
