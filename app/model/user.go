@@ -8,6 +8,7 @@ import (
 	"github.com/mylukin/EchoPilot/storage/mongo"
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // User
@@ -90,4 +91,29 @@ func (d *User) GetByUsername(username string) (*User, error) {
 func (d *User) CheckUsernameAvailable(username string) bool {
 	_, err := d.GetByUsername(username)
 	return err == nil
+}
+
+// update user
+func (d *User) Update(id primitive.ObjectID, username string) (*mongo.UpdateResult, error) {
+	return d.GetCollection().Where(bson.D{{"_id", id}}).Update(bson.D{{"$set", bson.M{"username": username}}})
+}
+
+// update user timezone by username
+func (d *User) UpdateTimezoneByUsername(username string, timezone string) (*mongo.UpdateResult, error) {
+	return d.GetCollection().Where(bson.D{{"username", username}}).Update(bson.D{{"$set", bson.M{"timezone": timezone}}})
+}
+
+// delete user
+func (d *User) Delete(id primitive.ObjectID) error {
+	return d.GetCollection().Where(bson.D{{"_id", id}}).Remove()
+}
+
+// get user list
+func (d *User) GetList(page int, pageSize int) (int64, []*User, error) {
+	var total int64 = 0
+	var list []*User
+	if v, err := d.GetCollection().Where(bson.D{}).SetOpts(options.Find().SetSort(bson.D{{"_id", -1}})).Pagination(page, 2, &list); err != nil {
+		return v, nil, err
+	}
+	return total, list, nil
 }
