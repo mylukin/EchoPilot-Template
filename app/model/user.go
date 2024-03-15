@@ -95,12 +95,12 @@ func (d *User) CheckUsernameAvailable(username string) bool {
 
 // update user
 func (d *User) Update(id primitive.ObjectID, username string) (*mongo.UpdateResult, error) {
-	return d.GetCollection().Where(bson.D{{"_id", id}}).Update(bson.D{{"$set", bson.M{"username": username}}})
+	return d.GetCollection().Where(bson.D{{"_id", id}}).Update(bson.M{"$set": bson.M{"username": username}})
 }
 
 // update user timezone by username
 func (d *User) UpdateTimezoneByUsername(username string, timezone string) (*mongo.UpdateResult, error) {
-	return d.GetCollection().Where(bson.D{{"username", username}}).Update(bson.D{{"$set", bson.M{"timezone": timezone}}})
+	return d.GetCollection().Where(bson.D{{"username", username}}).Update(bson.M{"$set": bson.M{"timezone": timezone}})
 }
 
 // delete user
