@@ -18,7 +18,6 @@ import (
 	"time"
 
 	"github.com/Xuanwo/go-locale"
-	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/mylukin/EchoPilot-Template/command"
@@ -38,11 +37,6 @@ const APP_NAME = "{APP_NAME}"
 const APP_VERSION = "0.1.0"
 
 func init() {
-	// load .env
-	err := godotenv.Load()
-	if err != nil {
-		panic("Error loading .env file")
-	}
 	redisDb.Prefix(config.CachePrefix)
 }
 
