@@ -124,7 +124,7 @@ func handleHttp() {
 				fmt.Printf("---- %s %s reqBody: %s\n", c.Request().Method, c.Request().RequestURI, fmt.Sprintf(`%v, %v`, reqContentType, len(reqBody)))
 			}
 			resContentType := http.DetectContentType(resBody)
-			if strings.Contains(reqContentType, "text/") {
+			if strings.Contains(resContentType, "text/") {
 				fmt.Printf("---- %s %s resBody: %s\n", c.Request().Method, c.Request().RequestURI, resBody)
 			} else {
 				fmt.Printf("---- %s %s resBody: %s\n", c.Request().Method, c.Request().RequestURI, fmt.Sprintf(`%v, %v`, resContentType, len(resBody)))
