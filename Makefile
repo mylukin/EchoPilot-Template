@@ -2,7 +2,7 @@ GOPATH=$(shell go env GOPATH)
 APP_NAME={APP_NAME}
 
 run: install-deps
-	@$(GOPATH)/bin/gin --port=3000 --bin='app-bin' --immediate --buildArgs='-v -x -mod=vendor -buildvcs=false' run main.go  
+	@$(GOPATH)/bin/gin --port=3000 --bin='app-bin' --immediate --buildArgs='-v -x -mod=readonly -buildvcs=false' run main.go  
 
 install-deps:
 	@ls $(GOPATH)/bin/gin > /dev/null 2>&1; if [ $$? -ne 0 ]; then \
@@ -27,9 +27,9 @@ generate: install-deps
 	 go generate
 
 build:
-	@go build -v -mod=vendor -buildvcs=false -o ./app-bin; \
+	@go build -v -mod=readonly -buildvcs=false -o ./app-bin; \
 	 chmod a+x ./app-bin
 
 install:
-	@go build -v -mod=vendor -buildvcs=false -o ./$(APP_NAME); \
+	@go build -v -mod=readonly -buildvcs=false -o ./$(APP_NAME); \
 	 chmod a+x ./$(APP_NAME) && mv ./$(APP_NAME) $(GOPATH)/bin/
