@@ -1,9 +1,13 @@
+IMAGE_NAME := EchoPilot/app-api
+IMAGE_TAG := $(shell date +%Y%m%d)
 GOPATH=$(shell go env GOPATH)
 APP_NAME={APP_NAME}
 
+.PHONY: run
 run: install-deps
 	@$(GOPATH)/bin/gin --port=3000 --bin='app-bin' --immediate --buildArgs='-v -x -mod=readonly -buildvcs=false' run main.go  
 
+.PHONY: install-deps
 install-deps:
 	@ls $(GOPATH)/bin/gin > /dev/null 2>&1; if [ $$? -ne 0 ]; then \
 		echo "install gin ..."; \
@@ -20,16 +24,32 @@ install-deps:
 		go install -mod=mod github.com/mylukin/easy-i18n/easyi18n; \
 	fi; \
 
-generate: install-deps	
+.PHONY: generate
+generate: install-deps
 	@export PATH="$(GOPATH)/bin:$(PATH)"; \
 	 go mod tidy; \
 	 go mod vendor; \
 	 go generate
 
-build:
-	@go build -v -mod=readonly -buildvcs=false -o ./app-bin; \
-	 chmod a+x ./app-bin
+.PHONY: app-build
+app-build:
+	@GOOS=linux GOARCH=amd64 go build -v -mod=readonly -buildvcs=false -o ./docker/app-bin; \
+	 chmod a+x ./docker/app-bin
 
+.PHONY: install
 install:
 	@go build -v -mod=readonly -buildvcs=false -o ./$(APP_NAME); \
 	 chmod a+x ./$(APP_NAME) && mv ./$(APP_NAME) $(GOPATH)/bin/
+
+.PHONY: build
+build: app-build
+	docker build -t $(IMAGE_NAME):$(IMAGE_TAG) ./docker
+	docker tag $(IMAGE_NAME):$(IMAGE_TAG) $(IMAGE_NAME):latest
+
+.PHONY: publish
+publish:
+	docker push $(IMAGE_NAME):$(IMAGE_TAG)
+	docker push $(IMAGE_NAME):latest
+
+.PHONY: release
+release: build publish

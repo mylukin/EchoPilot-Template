@@ -50,6 +50,12 @@ These instructions will help you to get your EchoPilot Template project up and r
   make generate
   ```
 
+## Run in Docker
+
+```bash
+docker run -d -p 3000:3000 -v ./.env:/go/app/.env --name myapp EchoPilot/app-api:latest
+```
+
 ## Project Structure
 
 EchoPilot-Template is organized into several directories, each with a specific purpose:
