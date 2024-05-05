@@ -43,7 +43,7 @@ install:
 
 .PHONY: build
 build: app-build
-	docker build -t $(IMAGE_NAME):$(IMAGE_TAG) ./docker
+	docker build --platform=linux/amd64 -t $(IMAGE_NAME):$(IMAGE_TAG) ./docker
 	docker tag $(IMAGE_NAME):$(IMAGE_TAG) $(IMAGE_NAME):latest
 
 .PHONY: publish
