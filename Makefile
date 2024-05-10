@@ -2,10 +2,12 @@ IMAGE_NAME := EchoPilot/app-api
 IMAGE_TAG := $(shell date +%Y%m%d)
 GOPATH=$(shell go env GOPATH)
 APP_NAME={APP_NAME}
+GIN_PORT=3000
+APP_PORT=$$(( $(GIN_PORT) + 1 ))
 
 .PHONY: run
 run: install-deps
-	@$(GOPATH)/bin/gin --port=3000 --bin='app-bin' --immediate --buildArgs='-v -x -mod=readonly -buildvcs=false' run main.go  
+	@$(GOPATH)/bin/gin --port=$(GIN_PORT) --appPort=$(APP_PORT) --bin='app-bin' --immediate --buildArgs='-v -x -mod=readonly -buildvcs=false' run main.go  
 
 .PHONY: install-deps
 install-deps:
