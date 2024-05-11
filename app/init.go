@@ -1,6 +1,8 @@
 package app
 
 import (
+	"fmt"
+
 	jsoniter "github.com/json-iterator/go"
 )
 
@@ -39,6 +41,8 @@ func Throw(i interface{}, code ...int) *Error {
 		if len(code) == 0 && v.Code != 0 {
 			errCode = v.Code
 		}
+	default:
+		message = fmt.Sprintf("%v", i)
 	}
 
 	return &Error{
