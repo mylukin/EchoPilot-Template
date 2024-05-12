@@ -8,13 +8,14 @@ import (
 
 	"github.com/labstack/echo/v4"
 	"github.com/mylukin/EchoPilot-Template/app"
+	appMiddleware "github.com/mylukin/EchoPilot-Template/app/middleware"
 	"github.com/mylukin/EchoPilot-Template/config"
 	"github.com/mylukin/EchoPilot/middleware"
 )
 
 // MountAPI is api router
 func MountAPI(e *echo.Echo) {
-	api := e.Group("/api")
+	api := e.Group("/api", appMiddleware.ResponseToJSON())
 
 	// 设置语言
 	api.Use(middleware.SetLang(middleware.SetLangConfig{
