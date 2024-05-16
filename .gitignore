@@ -3,6 +3,7 @@
 
 .DS_Store
 .env
+.port
 app-bin
 
 /vendor

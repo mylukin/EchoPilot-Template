@@ -2,7 +2,7 @@ IMAGE_NAME := EchoPilot/app-api
 IMAGE_TAG := $(shell date +%Y%m%d)
 GOPATH=$(shell go env GOPATH)
 APP_NAME={APP_NAME}
-GIN_PORT=3000
+GIN_PORT=$(shell if [ -f .port ]; then cat .port; else echo 3000; fi)
 APP_PORT=$$(( $(GIN_PORT) + 1 ))
 
 .PHONY: run
