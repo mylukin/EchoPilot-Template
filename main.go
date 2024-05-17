@@ -59,6 +59,13 @@ func handleCLI() {
 	// Detect OS language
 	tag, _ := locale.Detect()
 
+	// Set log level
+	if helper.Config("ENV") != "GA" {
+		log.SetLevel(log.INFO)
+	} else {
+		log.SetLevel(log.DEBUG)
+	}
+
 	// Set Language
 	ei18n.SetLang(tag)
 
@@ -98,6 +105,12 @@ func handleHttp() {
 	e.HideBanner = true
 	// debug mode
 	e.Debug = helper.Config("ENV") != "GA"
+	// Set log level
+	if !e.Debug {
+		log.SetLevel(log.INFO)
+	} else {
+		log.SetLevel(log.DEBUG)
+	}
 	// enable logger
 	e.Use(eMiddleware.LoggerWithConfig(eMiddleware.LoggerConfig{
 		Format:      middleware.DefaultLoggerConfig.Format,
