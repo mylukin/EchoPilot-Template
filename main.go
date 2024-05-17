@@ -9,7 +9,6 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
 	"net/http"
 	"net/http/httputil"
 	"os"
@@ -20,6 +19,7 @@ import (
 	"github.com/Xuanwo/go-locale"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
+	"github.com/labstack/gommon/log"
 	"github.com/mylukin/EchoPilot-Template/command"
 	"github.com/mylukin/EchoPilot-Template/config"
 	"github.com/mylukin/EchoPilot-Template/routers"
@@ -41,6 +41,12 @@ func init() {
 }
 
 func main() {
+	// Set log level
+	if helper.Config("ENV") != "GA" {
+		log.SetLevel(log.INFO)
+	} else {
+		log.SetLevel(log.DEBUG)
+	}
 	if len(os.Args) > 1 && (os.Args[1] == "main.go" || os.Args[1] == "server") {
 		handleHttp()
 	} else {
