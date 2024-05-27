@@ -12,6 +12,8 @@ func init() {
 
 }
 
+type JSON map[string]interface{}
+
 // Error is error
 type Error struct {
 	Code    int         `json:"code"`
@@ -21,6 +23,22 @@ type Error struct {
 
 func (e *Error) Error() string {
 	return e.Message
+}
+
+// Result is send message
+type Result struct {
+	Code   int    `json:"code"`
+	Status string `json:"status"`
+	Result any    `json:"result"`
+}
+
+// Error
+func (body Result) Error() string {
+	data, err := json.Marshal(body)
+	if err != nil {
+		return err.Error()
+	}
+	return string(data)
 }
 
 // Throw is throw err
@@ -52,21 +70,11 @@ func Throw(i interface{}, code ...int) *Error {
 	}
 }
 
-// Result is send message
-type Result map[string]interface{}
-
-// Error
-func (body Result) Error() string {
-	data, err := json.Marshal(body)
-	if err != nil {
-		return err.Error()
+// Success
+func Success(data any) *Result {
+	return &Result{
+		Code:   200,
+		Status: "ok",
+		Result: data,
 	}
-	return string(data)
-}
-
-type Body struct {
-	Code    int    `json:"code"`
-	Status  string `json:"status"`
-	Message string `json:"message,omitempty"`
-	Result  any    `json:"result,omitempty"`
 }

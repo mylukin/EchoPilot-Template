@@ -55,11 +55,7 @@ func ResponseToJSON() echo.MiddlewareFunc {
 				})
 			default:
 				if c.Response().Size == 0 {
-					return c.JSON(http.StatusOK, Result{
-						Code:   200,
-						Status: "ok",
-						Result: v,
-					})
+					return c.JSON(http.StatusOK, v)
 				}
 				return result
 			}
