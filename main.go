@@ -25,7 +25,6 @@ import (
 	"github.com/mylukin/EchoPilot-Template/routers"
 	"github.com/mylukin/EchoPilot/helper"
 	eMiddleware "github.com/mylukin/EchoPilot/middleware"
-	"github.com/mylukin/EchoPilot/service/i18n"
 	redisDb "github.com/mylukin/EchoPilot/storage/redis"
 	ei18n "github.com/mylukin/easy-i18n/i18n"
 	"github.com/urfave/cli/v2"
@@ -152,12 +151,7 @@ func handleHttp() {
 	}))
 
 	// static
-	e.Static("/static", "public")
-
-	// mount routers
-	e.GET("/", func(c echo.Context) error {
-		return c.String(http.StatusOK, i18n.Sprintf(c, "Hello, World!"))
-	})
+	e.Static("/", "public")
 
 	// mount api
 	routers.MountAPI(e)
