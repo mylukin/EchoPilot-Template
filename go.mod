@@ -7,7 +7,7 @@ require (
 	github.com/json-iterator/go v1.1.12
 	github.com/labstack/echo/v4 v4.12.0
 	github.com/labstack/gommon v0.4.2
-	github.com/mylukin/EchoPilot v0.1.4
+	github.com/mylukin/EchoPilot v0.1.23
 	github.com/mylukin/easy-i18n v0.1.0
 	github.com/urfave/cli/v2 v2.27.2
 	go.mongodb.org/mongo-driver v1.15.0
@@ -46,5 +46,6 @@ require (
 	golang.org/x/sync v0.7.0 // indirect
 	golang.org/x/sys v0.20.0 // indirect
 	golang.org/x/time v0.5.0 // indirect
+	gopkg.in/telebot.v3 v3.3.6 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
 )
