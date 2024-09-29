@@ -1,7 +1,7 @@
 {
-  "A new cli application": "A new cli application",
-  "Executing test command...": "Executing test command...",
-  "Hello, %s!": "Hello, %s!",
-  "Start http server": "Start http server",
-  "test": "test"
+  "A new cli application": "一个新的cli应用程序",
+  "Executing test command...": "执行测试命令...",
+  "Hello, %s!": "你好, %s!",
+  "Start http server": "启动http服务器",
+  "test": "测试"
 }

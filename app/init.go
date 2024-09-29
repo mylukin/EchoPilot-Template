@@ -14,6 +14,15 @@ func init() {
 
 type JSON map[string]interface{}
 
+// Error
+func (body JSON) Error() string {
+	data, err := json.Marshal(body)
+	if err != nil {
+		return err.Error()
+	}
+	return string(data)
+}
+
 // Error is error
 type Error struct {
 	Code    int         `json:"code"`

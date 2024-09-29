@@ -26,6 +26,11 @@ install-deps:
 		go install -mod=mod github.com/mylukin/easy-i18n/easyi18n; \
 	fi; \
 
+	@ls $(GOPATH)/bin/translator > /dev/null 2>&1; if [ $$? -ne 0 ]; then \
+		echo "install translator ..."; \
+		go install -mod=mod github.com/mylukin/translator; \
+	fi; \
+
 .PHONY: generate
 generate: install-deps
 	@export PATH="$(GOPATH)/bin:$(PATH)"; \

@@ -3,7 +3,9 @@ package app
 import (
 	"bytes"
 	"io"
+	"regexp"
 
+	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"github.com/mylukin/EchoPilot/helper"
 	"github.com/mylukin/easy-i18n/i18n"
@@ -34,4 +36,26 @@ func GetCookie(c echo.Context, name string) string {
 		return ""
 	}
 	return cookie.Value
+}
+
+// BindValidate is bind validate
+func BindValidate(c echo.Context, i interface{}) error {
+	// 绑定数据
+	if err := c.Bind(i); err != nil {
+		return err
+	}
+	// 对数据验证
+	if err := c.Validate(i); err != nil {
+		return err
+	}
+	return nil
+}
+
+// IsURLOrDataURI
+func IsURLOrDataURI(fl validator.FieldLevel) bool {
+	urlRegex := regexp.MustCompile(`(?i)^(https?|ftp):\/\/`)
+	dataURIRegex := regexp.MustCompile(`^data:image/(\w+);base64,`)
+
+	value := fl.Field().String()
+	return urlRegex.MatchString(value) || dataURIRegex.MatchString(value)
 }

@@ -3,7 +3,8 @@ package main
 //go:generate codetool gen_bot_events github.com/mylukin/EchoPilot-Template
 //go:generate easyi18n extract . ./locales/en.json
 //go:generate easyi18n update -f ./locales/en.json ./locales/zh-hans.json
-//go:generate easyi18n update -f ./locales/en.json ./locales/zh-hant.json
+//go:generate translator -m gpt-4o -i ./locales/en.json -l zh-hans
+//go:generate translator -m gpt-4o -i ./locales/zh-hans.json -l zh-hant
 //go:generate easyi18n generate --pkg=catalog ./locales ./catalog/main.go
 
 import (
@@ -17,14 +18,17 @@ import (
 	"time"
 
 	"github.com/Xuanwo/go-locale"
+	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 	"github.com/labstack/gommon/log"
+	"github.com/mylukin/EchoPilot-Template/app"
 	"github.com/mylukin/EchoPilot-Template/command"
 	"github.com/mylukin/EchoPilot-Template/config"
 	"github.com/mylukin/EchoPilot-Template/routers"
 	"github.com/mylukin/EchoPilot/helper"
 	eMiddleware "github.com/mylukin/EchoPilot/middleware"
+	"github.com/mylukin/EchoPilot/storage/mongo"
 	redisDb "github.com/mylukin/EchoPilot/storage/redis"
 	ei18n "github.com/mylukin/easy-i18n/i18n"
 	"github.com/urfave/cli/v2"
@@ -39,13 +43,19 @@ func init() {
 	redisDb.Prefix(config.CachePrefix)
 }
 
+// see: https://github.com/go-playground/validator
+type gValidator struct {
+	validator *validator.Validate
+}
+
+func (cv *gValidator) Validate(i interface{}) error {
+	return cv.validator.Struct(i)
+}
+
 func main() {
-	// Set log level
-	if helper.Config("ENV") != "GA" {
-		log.SetLevel(log.INFO)
-	} else {
-		log.SetLevel(log.DEBUG)
-	}
+	// 关闭数据库连接
+	defer mongo.Close()
+
 	if len(os.Args) > 1 && (os.Args[1] == "main.go" || os.Args[1] == "server") {
 		handleHttp()
 	} else {
@@ -60,9 +70,9 @@ func handleCLI() {
 
 	// Set log level
 	if helper.Config("ENV") != "GA" {
-		log.SetLevel(log.INFO)
-	} else {
 		log.SetLevel(log.DEBUG)
+	} else {
+		log.SetLevel(log.INFO)
 	}
 
 	// Set Language
@@ -106,9 +116,9 @@ func handleHttp() {
 	e.Debug = helper.Config("ENV") != "GA"
 	// Set log level
 	if !e.Debug {
-		log.SetLevel(log.INFO)
-	} else {
 		log.SetLevel(log.DEBUG)
+	} else {
+		log.SetLevel(log.INFO)
 	}
 	// enable logger
 	e.Use(eMiddleware.LoggerWithConfig(eMiddleware.LoggerConfig{
@@ -129,6 +139,12 @@ func handleHttp() {
 	e.Use(middleware.CORSWithConfig(middleware.CORSConfig{
 		AllowOrigins: []string{"*"},
 	}))
+
+	validateObj := validator.New()
+	validateObj.RegisterValidation("media", app.IsURLOrDataURI)
+	// set Validator
+	e.Validator = &gValidator{validator: validateObj}
+
 	// Body Dump
 	e.Use(middleware.BodyDump(func(c echo.Context, reqBody, resBody []byte) {
 		if c.Echo().Debug {
@@ -137,12 +153,18 @@ func handleHttp() {
 
 			reqContentType := http.DetectContentType(reqBody)
 			if strings.Contains(reqContentType, "text/") {
+				if len(reqBody) > 1024 {
+					reqBody = []byte(fmt.Sprintf("%s...", reqBody[:1024]))
+				}
 				fmt.Printf("---- %s %s reqBody: %s\n", c.Request().Method, c.Request().RequestURI, reqBody)
 			} else {
 				fmt.Printf("---- %s %s reqBody: %s\n", c.Request().Method, c.Request().RequestURI, fmt.Sprintf(`%v, %v`, reqContentType, len(reqBody)))
 			}
 			resContentType := http.DetectContentType(resBody)
 			if strings.Contains(resContentType, "text/") {
+				if len(resBody) > 1024 {
+					resBody = []byte(fmt.Sprintf("%s...", resBody[:1024]))
+				}
 				fmt.Printf("---- %s %s resBody: %s\n", c.Request().Method, c.Request().RequestURI, resBody)
 			} else {
 				fmt.Printf("---- %s %s resBody: %s\n", c.Request().Method, c.Request().RequestURI, fmt.Sprintf(`%v, %v`, resContentType, len(resBody)))
