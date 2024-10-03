@@ -115,7 +115,7 @@ func handleHttp() {
 	// debug mode
 	e.Debug = helper.Config("ENV") != "GA"
 	// Set log level
-	if !e.Debug {
+	if e.Debug {
 		log.SetLevel(log.DEBUG)
 	} else {
 		log.SetLevel(log.INFO)
