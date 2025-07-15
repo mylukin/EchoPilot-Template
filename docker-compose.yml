@@ -1,0 +1,71 @@
+services:
+  # API 服务器
+  api:
+    image: ghcr.io/{PACKAGE_NAME}:latest
+    container_name: {APP_NAME_LOWER}-api
+    ports:
+      - "3000:3000"
+    env_file:
+      - .env
+    volumes:
+      - ./.env:/go/app/.env:ro
+      - ./config:/go/app/config:ro
+      - ./public:/go/app/public:ro
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    command: ["/go/app/app-bin", "server"]
+    networks:
+      - {APP_NAME_LOWER}-network
+
+  # 常驻进程服务器（队列处理器）
+  workers:
+    image: ghcr.io/{PACKAGE_NAME}:latest
+    container_name: {APP_NAME_LOWER}-workers
+    env_file:
+      - .env
+    volumes:
+      - ./.env:/go/app/.env:ro
+      - ./config:/go/app/config:ro
+      - ./public:/go/app/public:ro
+      - ./cache:/go/app/cache
+      - ./scripts:/go/app/scripts:ro
+    restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    command: ["/go/app/scripts/start-workers.sh"]
+    networks:
+      - {APP_NAME_LOWER}-network
+
+  # 一次性命令执行器
+  runner:
+    image: ghcr.io/{PACKAGE_NAME}:latest
+    env_file:
+      - .env
+    volumes:
+      - ./data:/go/app/data:ro
+      - ./.env:/go/app/.env:ro
+      - ./config:/go/app/config:ro
+      - ./public:/go/app/public:ro
+      - ./cache:/go/app/cache
+      - ./scripts:/go/app/scripts:ro
+    profiles:
+      - tools
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+    command: ["/go/app/app-bin"]
+    networks:
+      - {APP_NAME_LOWER}-network
+
+networks:
+  {APP_NAME_LOWER}-network:
+    driver: bridge

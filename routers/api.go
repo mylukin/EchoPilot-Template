@@ -45,5 +45,8 @@ func MountAPI(e *echo.Echo) {
 
 	api.GET("/", app.HelloWorld)
 	api.GET("/ping", app.Ping)
+	
+	// debug pprof
+	PProf(api)
 
 }

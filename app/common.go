@@ -7,14 +7,14 @@ import (
 
 	"github.com/go-playground/validator/v10"
 	"github.com/labstack/echo/v4"
-	"github.com/mylukin/EchoPilot/helper"
+	"github.com/mylukin/EchoPilot-Template/config"
 	"github.com/mylukin/easy-i18n/i18n"
 )
 
 // get user language
 func GetUserLang(c echo.Context) string {
 	if c.Get("Language") == nil {
-		return helper.Config("LANGUAGE")
+		return config.Language
 	}
 	return c.Get("Language").(*i18n.Printer).String()
 }

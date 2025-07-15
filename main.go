@@ -69,7 +69,7 @@ func handleCLI() {
 	tag, _ := locale.Detect()
 
 	// Set log level
-	if helper.Config("ENV") != "GA" {
+	if config.ENV != "GA" {
 		log.SetLevel(log.DEBUG)
 	} else {
 		log.SetLevel(log.INFO)
@@ -113,7 +113,7 @@ func handleHttp() {
 	// hidden Banner
 	e.HideBanner = true
 	// debug mode
-	e.Debug = helper.Config("ENV") != "GA"
+	e.Debug = config.ENV != "GA"
 	// Set log level
 	if e.Debug {
 		log.SetLevel(log.DEBUG)
