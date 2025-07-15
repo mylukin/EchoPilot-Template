@@ -1,6 +1,5 @@
 package main
 
-//go:generate codetool gen_bot_events github.com/mylukin/EchoPilot-Template
 //go:generate easyi18n extract . ./locales/en.json
 //go:generate easyi18n update -f ./locales/en.json ./locales/zh-hans.json
 //go:generate translator -m gpt-4o -i ./locales/en.json -l zh-hans
