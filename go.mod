@@ -10,7 +10,7 @@ require (
 	github.com/labstack/echo-jwt/v4 v4.3.1
 	github.com/labstack/echo/v4 v4.13.4
 	github.com/labstack/gommon v0.4.2
-	github.com/mylukin/EchoPilot v0.1.66
+	github.com/mylukin/EchoPilot v0.1.67
 	github.com/mylukin/easy-i18n v0.1.0
 	github.com/urfave/cli/v2 v2.27.7
 	go.mongodb.org/mongo-driver v1.17.4

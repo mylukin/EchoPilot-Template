@@ -358,8 +358,8 @@ github.com/montanaflynn/stats v0.7.1 h1:etflOAAHORrCC44V+aR6Ftzort912ZU+YLiSTuV8
 github.com/montanaflynn/stats v0.7.1/go.mod h1:etXPPgVO6n31NxCd9KQUMvCM+ve0ruNzt6R8Bnaayow=
 github.com/mwitkow/go-conntrack v0.0.0-20161129095857-cc309e4a2223/go.mod h1:qRWi+5nqEBWmkhHvq77mSJWrCKwh8bxhgT7d/eI7P4U=
 github.com/mwitkow/go-conntrack v0.0.0-20190716064945-2f068394615f/go.mod h1:qRWi+5nqEBWmkhHvq77mSJWrCKwh8bxhgT7d/eI7P4U=
-github.com/mylukin/EchoPilot v0.1.66 h1:Mmc/bNlO7prhS5lKqUC3NxhmbJt7dCH42f/tFm1lcI4=
-github.com/mylukin/EchoPilot v0.1.66/go.mod h1:IP55MPMDot5TTIXzwuuOvbwHWtqCDYFtYpSmWsk2nYo=
+github.com/mylukin/EchoPilot v0.1.67 h1:6SCMSGpOzfq8uvJetVzeZ/W65q++ffAtV6EBn4l1VmU=
+github.com/mylukin/EchoPilot v0.1.67/go.mod h1:QJAKHdeln0YjIlO+b4uYd7QSJaORsKG8EAJsppvoFaQ=
 github.com/mylukin/easy-i18n v0.1.0 h1:iGoS0/hMAPvUcHDBmPBl8jTHBBWEnoWZMKZiJw1DiFE=
 github.com/mylukin/easy-i18n v0.1.0/go.mod h1:gzjQFWVxPqMVEkb4mQqmIYLlyQeY3bVlQ0hbFIkSNMc=
 github.com/pascaldekloe/goe v0.0.0-20180627143212-57f6aae5913c/go.mod h1:lzWF7FIEvWOWxwDKqyGYQf6ZUaNfKdP144TG7ZOy1lc=
